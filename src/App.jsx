@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import React from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { db } from './config'
 import { collection, doc, getDocs, addDoc, deleteDoc } from "firebase/firestore"
@@ -9,10 +7,11 @@ import { Wheel } from 'react-custom-roulette'
 
 function App() {
 
-  const [films, setFilms] = useState([])
+  const [films, setFilms] = useState(["options:easter egg"])
   const [film, setFilm] = useState({
     option: "",
   })
+  const [loading,setLoading]=useState(true)
   const [deletefilm, setdeleteFilm] = useState({
     deleteOption: "",
   })
@@ -40,11 +39,13 @@ function App() {
 
   useEffect(() => {
     const getFilms = async () => {
+      setLoading(true)
       const data = await getDocs(filmsCollectionRef)
       setFilms(data.docs.map((doc) => ({ ...doc.data() })));
     }
 
     getFilms()
+    
   }, [])
 
 
@@ -59,7 +60,7 @@ function App() {
 
   const handleSpinClick = () => {
     if (!mustSpin) {
-      const newPrizeNumber = Math.floor(Math.random() * data.length);
+      const newPrizeNumber = Math.floor(Math.random() * films.length);
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);
     }
@@ -91,7 +92,7 @@ function App() {
   const colors = []
 
   const genColors = () => {
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < films.length; i++) {
       colors.push(randColor())
     }
     return colors
@@ -127,7 +128,7 @@ function App() {
               fontSize={15}
               mustStartSpinning={mustSpin}
               prizeNumber={prizeNumber}
-              data={data}
+              data={films}
               backgroundColors={colorsForWheel}
               innerRadius={10}
               radiusLineWidth={10}
@@ -142,7 +143,7 @@ function App() {
           <div className='items-center justify-center flex mb-10'>
             <button className='border-[3px] border-black rounded-xl bg-blue-500 w-40 h-16' onClick={handleSpinClick}>SPIN</button>
           </div>
-          {films.map((film, index) => (
+          {!loading && films.map((film, index) => (
             <h1 key={index}>{film.option} </h1>
           ))}
         </div>
