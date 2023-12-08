@@ -31,7 +31,6 @@ function App() {
       const data = await getDocs(filmsCollectionRef)
       for (let i = 0; i < data.docs.length; i++) {
         if (data.docs[i].data().option == name) {
-          console.log("deleting")
           const filmDoc = doc(db, "Films", data.docs[i].id)
           await deleteDoc(filmDoc).then(()=>{window.location.reload()})
         }
@@ -69,13 +68,11 @@ function App() {
   const handleChange = (e) => {
     const value = e.target.value
     setFilm({ ...film, [e.target.name]: value })
-    console.log(film.option);
 
   }
   const handleDelChange = (e) => {
     const value = e.target.value
     setdeleteFilm({ ...deletefilm, [e.target.name]: value })
-    console.log(deletefilm.deleteOption);
 
   }
 
