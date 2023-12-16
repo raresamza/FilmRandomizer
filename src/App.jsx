@@ -92,9 +92,10 @@ function App() {
   const colors = []
 
   const genColors = () => {
-    for (let i = 0; i < films.length; i++) {
+    for (let i = 0; i <= films.length; i++) {
       colors.push(randColor())
     }
+    console.log(colors)
     return colors
   }
 
